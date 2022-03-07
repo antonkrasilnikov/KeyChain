@@ -8,7 +8,7 @@
 import Foundation
 import Security
 
-class KeyChain {
+open class KeyChain {
     
     private class func getKeychainQuery(service: String, account: String) -> [String: Any] {
         return [String(kSecClass) : kSecClassGenericPassword,
@@ -18,7 +18,7 @@ class KeyChain {
         ]
     }
     
-    @discardableResult class func save(service: String, account: String, data: Any) -> Bool {
+    @discardableResult open class func save(service: String, account: String, data: Any) -> Bool {
         var keychainQuery = Self.getKeychainQuery(service: service, account: account)
         SecItemDelete(keychainQuery as CFDictionary)
         
@@ -38,7 +38,7 @@ class KeyChain {
         return SecItemAdd(keychainQuery as CFDictionary, nil) == errSecSuccess
     }
     
-    class func load(service: String, account: String) -> Any? {
+    open class func load(service: String, account: String) -> Any? {
         var keychainQuery = Self.getKeychainQuery(service: service, account: account)
         keychainQuery[String(kSecReturnData)] = kCFBooleanTrue
         keychainQuery[String(kSecMatchLimit)] = kSecMatchLimitOne
@@ -54,7 +54,7 @@ class KeyChain {
         return nil
     }
     
-    @discardableResult class func delete(service: String, account: String) -> Bool {
+    @discardableResult open class func delete(service: String, account: String) -> Bool {
         let keychainQuery = Self.getKeychainQuery(service: service, account: account)
         let result = SecItemDelete(keychainQuery as CFDictionary)
         return result == errSecSuccess || result == errSecNoSuchKeychain
